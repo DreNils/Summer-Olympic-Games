@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trinkspiel Turnier – Punkteverwaltung</title>
   <style>
     body {
@@ -125,6 +126,23 @@
     #rules ul {
       margin-top: 0;
     }
+
+    .box-intro {
+      margin-bottom: 20px;
+    }
+
+    .box-games {
+      margin-top: 20px;
+    }
+
+    .btn-import {
+      background: #6c757d;
+      cursor: pointer;
+    }
+
+    #importFile {
+      display: none;
+    }
   </style>
 </head>
 
@@ -133,7 +151,7 @@
     <h1>Summer-Olympic-Games – Punkteverwaltung</h1>
 
     <!-- Allgemeine Infos -->
-    <div class="box" style="margin-bottom: 20px;">
+    <div class="box box-intro">
       <h2>Allgemeine Regeln</h2>
       <ul>
         <li>8 Personen, 4 Teams à 2 Spieler (oder beliebig viele Teams).</li>
@@ -151,7 +169,15 @@
         <input type="text" id="teamName" placeholder="z.B. Team A">
         <button class="btn" id="addTeamBtn">Team hinzufügen</button>
         <button class="btn btn-danger" id="resetBtn">Reset (Alles löschen)</button>
-        <p class="small">Füge zuerst deine Teams hinzu (z.B. Team A, Team B). „Reset“ löscht alle Teams und Punkte.</p>
+        <button class="btn btn-secondary" id="exportBtn">JSON exportieren</button>
+        <label class="btn btn-import">
+          JSON importieren
+          <input type="file" id="importFile" accept=".json">
+        </label>
+        <p class="small">Füge zuerst deine Teams hinzu (z.B. Team A, Team B). „Reset" löscht alle Teams und Punkte.<br>
+          <strong>JSON exportieren</strong> speichert den aktuellen Stand als Datei. <strong>JSON importieren</strong>
+          lädt einen gespeicherten Stand zurück.
+        </p>
 
         <table id="teamsTable">
           <thead>
@@ -202,7 +228,7 @@
     </div>
 
     <!-- Übersicht -->
-    <div class="box" style="margin-top:20px;">
+    <div class="box box-games">
       <h2>Spielverlauf</h2>
       <table id="gamesTable">
         <thead>
@@ -318,6 +344,8 @@
   </div>
 
   <script>
+    const STORAGE_KEY = 'olympicGamesData';
+
     let teams = [];
     let results = [];
 
@@ -329,6 +357,62 @@
     const saveResultBtn = document.getElementById('saveResultBtn');
     const gamesTableBody = document.querySelector('#gamesTable tbody');
     const gameSelect = document.getElementById('gameSelect');
+
+    function saveToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ teams, results }));
+      } catch (e) {
+        console.error('Speichern fehlgeschlagen:', e);
+      }
+    }
+
+    function loadFromStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (Array.isArray(data.teams)) teams = data.teams;
+        if (Array.isArray(data.results)) results = data.results;
+      } catch (e) {
+        console.error('Laden fehlgeschlagen:', e);
+      }
+    }
+
+    function exportJSON() {
+      const data = JSON.stringify({ teams, results }, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'olympic-games-ergebnisse.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (!Array.isArray(data.teams) || !Array.isArray(data.results)) {
+            alert('Ungültige JSON-Datei.');
+            return;
+          }
+          teams = data.teams;
+          results = data.results;
+          saveToStorage();
+          renderTeams();
+          renderGames();
+          renderResultInputs();
+        } catch (err) {
+          alert('Fehler beim Lesen der Datei: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
 
     function renderTeams() {
       teamsTableBody.innerHTML = '';
@@ -388,6 +472,7 @@
       if (!name) return;
       teams.push({ name, points: 0 });
       teamNameInput.value = '';
+      saveToStorage();
       renderTeams();
       renderResultInputs();
     });
@@ -405,6 +490,7 @@
         }
       });
 
+      saveToStorage();
       renderTeams();
       renderGames();
       renderResultInputs();
@@ -416,11 +502,21 @@
       }
       teams = [];
       results = [];
+      saveToStorage();
       renderTeams();
       renderGames();
       renderResultInputs();
       teamNameInput.value = '';
     });
+
+    document.getElementById('exportBtn').addEventListener('click', exportJSON);
+    document.getElementById('importFile').addEventListener('change', importJSON);
+
+    // Daten beim Start laden
+    loadFromStorage();
+    renderTeams();
+    renderGames();
+    renderResultInputs();
   </script>
 </body>
 
