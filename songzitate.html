@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personenraten – Summer Olympic Games</title>
+    <title>Songzitate raten – Summer Olympic Games</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -64,43 +64,38 @@
             text-align: center;
         }
 
-        .person-img {
-            width: 100%;
-            max-width: 360px;
-            height: 360px;
-            object-fit: cover;
-            border-radius: 8px;
+        .lyric-box {
+            background: #f9f9f9;
             border: 2px solid #ddd;
-            background: #eee;
-        }
-
-        .img-error {
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 100px;
+            margin: 16px 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            max-width: 360px;
-            height: 360px;
-            border-radius: 8px;
-            border: 2px dashed #ccc;
-            background: #f5f5f5;
-            color: #aaa;
-            font-size: 14px;
-            margin: 0 auto;
         }
 
-        .name-box {
+        .lyric-text {
+            font-size: 18px;
+            font-style: italic;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .answer-box {
             margin: 16px 0;
-            min-height: 36px;
+            min-height: 60px;
         }
 
-        .name-box .person-name {
-            font-size: 24px;
+        .answer-box .answer-info {
+            font-size: 16px;
             font-weight: bold;
             color: #007b00;
+            line-height: 1.5;
         }
 
-        .name-box .hidden {
+        .answer-box .hidden {
             display: none;
         }
 
@@ -256,31 +251,32 @@
 <body>
     <div class="container">
         <a class="nav-back" href="index.html">← Zurück zur Hauptseite</a>
-        <h1>Personenraten</h1>
+        <h1>Songzitate raten</h1>
 
         <div id="loadingMsg" class="loading">
             <div class="spinner"></div>
-            <p>Bilder werden geladen…</p>
+            <p>Songzitate werden geladen…</p>
         </div>
 
         <div id="quizArea" class="hidden-el">
-            <p class="progress" id="progressText">Person 1 von 15</p>
+            <p class="progress" id="progressText">Songzitat 1 von 15</p>
             <div class="progress-bar-wrap">
                 <div class="progress-bar" id="progressBar"></div>
             </div>
 
             <div class="card">
-                <img id="personImg" class="person-img" src="" alt="Bekannte Person">
-                <div id="imgError" class="img-error hidden-el">Bild konnte nicht geladen werden</div>
-
-                <div class="name-box">
-                    <span class="person-name hidden" id="personName"></span>
+                <div class="lyric-box">
+                    <p class="lyric-text" id="lyricText">Songzitat wird geladen...</p>
                 </div>
 
-                <p class="hint" id="hintText">Wer ist diese Person?</p>
+                <div class="answer-box">
+                    <div class="answer-info hidden" id="answerInfo"></div>
+                </div>
 
-                <button class="btn btn-reveal" id="revealBtn">Name aufdecken</button>
-                <button class="btn btn-next" id="nextBtn" disabled>Nächste Person →</button>
+                <p class="hint" id="hintText">Welcher Song und welcher Künstler?</p>
+
+                <button class="btn btn-reveal" id="revealBtn">Antwort aufdecken</button>
+                <button class="btn btn-next" id="nextBtn" disabled>Nächstes Zitat →</button>
             </div>
 
             <hr class="divider">
@@ -296,7 +292,7 @@
 
         <div class="finished-msg hidden-el" id="finishedArea">
             <h2>Spiel beendet!</h2>
-            <p>Alle 15 Personen wurden gezeigt. Hier die aktuellen Punkte:</p>
+            <p>Alle 15 Songzitate wurden gezeigt. Hier die aktuellen Punkte:</p>
             <table class="summary-table">
                 <thead>
                     <tr>
@@ -316,44 +312,23 @@
     <script>
         const STORAGE_KEY = 'olympicGamesData';
 
-        const persons = [
-            { name: 'Testlauf: Albert Einstein', wiki: 'Albert_Einstein' },
-            { name: 'Testlauf:Elon Musk', wiki: 'Elon_Musk' },
-            { name: 'Taylor Swift', wiki: 'Taylor_Swift' },
-            { name: 'Marie Curie', wiki: 'Marie_Curie' },
-            { name: 'Lionel Messi', wiki: 'Lionel_Messi' },
-            { name: 'Cristiano Ronaldo', wiki: 'Cristiano_Ronaldo' },
-            { name: 'Leonardo da Vinci', wiki: 'Leonardo_da_Vinci' },
-            { name: 'Billie Eilish', wiki: 'Billie_Eilish' },
-            { name: 'Charlie Chaplin', wiki: 'Charlie_Chaplin' },
-            { name: 'Dwayne Johnson', wiki: 'Dwayne_Johnson' },
-            { name: 'Ariana Grande', wiki: 'Ariana_Grande' },
-            { name: 'LeBron James', wiki: 'LeBron_James' },
-            { name: 'Rihanna', wiki: 'Rihanna' },
-            { name: 'Ed Sheeran', wiki: 'Ed_Sheeran' },
-            { name: 'Jeff Bezos', wiki: 'Jeff_Bezos' }
+        const songs = [
+            { lyrics: "Testlauf: I'm too sexy for my shirt", artist: 'Right Said Fred', title: 'I\'m Too Sexy' },
+            { lyrics: 'Testlauf: Don\'t stop me now, I\'m having such a good time', artist: 'Queen', title: 'Don\'t Stop Me Now' },
+            { lyrics: 'Never mind, I\'ll find someone like you', artist: 'Adele', title: 'Someone Like You' },
+            { lyrics: 'Is this the real life? Is this just fantasy?', artist: 'Queen', title: 'Bohemian Rhapsody' },
+            { lyrics: 'Imagine all the people living life in peace', artist: 'John Lennon', title: 'Imagine' },
+            { lyrics: 'In the end it doesn\'t even matter', artist: 'Linkin Park', title: 'In the End' },
+            { lyrics: 'Its okay to eat fish cause they don\'t have any feelings', artist: 'Nirvana', title: 'Something in the way' },
+            { lyrics: 'We don\'t need no education', artist: 'Pink Floyd', title: 'Another Brick in the Wall' },
+            { lyrics: 'I traveled round the world - Looking for a home. I found myself in crowded rooms -Feeling so alone.', artist: 'Madonna', title: 'Drowned World/Substitute For Love' },
+            { lyrics: 'Wenn du denkst, es geht nicht mehr, kommt von irgendwo ein Lichtlein her!', artist: 'Udo Lindenberg', title: 'Ich mach mein Ding' },
+            { lyrics: 'Gib mir eine Tonne weiße Ziegelsteine und ich baue ein Iglu/Ich hab mehr Weiß gesehn als ein Eskimo ', artist: 'Haftbefehl', title: 'Bolon' },
+            { lyrics: 'Sei nicht so verkrampft, Mann, guck dir die Natur an. Ey, die Welt ist rund und wir sind nur am Wandern.', artist: 'Peter Fox', title: 'Schüttel dein Speck' },
+            { lyrics: 'Ich zieh\' eine Line wie ein Linienrichter.', artist: 'Moneyboy', title: 'Ballin\'' },
+            { lyrics: 'Ihr Partypatrioten seid nur weniger konsequent als diese Hakenkreuz-Idioten. Die geh\'n halt noch selber ein paar Ausländer töten, anstatt jemand zu bezahln, um sie vom Schlauchboot zu treten.', artist: 'KIZ', title: 'Boom, Boom, Boom' },
+            { lyrics: 'Ich hab\' jetzt ein Jahr, statt zu ficken, mir nur runtergeholt Weil ich wollte wissen, wie es ist in der Jungen Union ', artist: 'Mehnersmoos', title: 'Ausländer' }
         ];
-
-        async function loadImages() {
-            quizArea.classList.add('hidden-el');
-            loadingMsg.classList.remove('hidden-el');
-            await Promise.all(persons.map(async (p) => {
-                try {
-                    const res = await fetch(
-                        `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(p.wiki)}`,
-                        { headers: { 'Accept': 'application/json' } }
-                    );
-                    const data = await res.json();
-                    p.img = data.thumbnail ? data.thumbnail.source : null;
-                } catch (e) {
-                    p.img = null;
-                }
-            }));
-            loadingMsg.classList.add('hidden-el');
-            quizArea.classList.remove('hidden-el');
-            showPerson(current);
-            renderTeamList();
-        }
 
         let current = 0;
         let revealed = false;
@@ -361,9 +336,8 @@
         const loadingMsg = document.getElementById('loadingMsg');
         const progressText = document.getElementById('progressText');
         const progressBar = document.getElementById('progressBar');
-        const personImg = document.getElementById('personImg');
-        const imgError = document.getElementById('imgError');
-        const personName = document.getElementById('personName');
+        const lyricText = document.getElementById('lyricText');
+        const answerInfo = document.getElementById('answerInfo');
         const hintText = document.getElementById('hintText');
         const revealBtn = document.getElementById('revealBtn');
         const nextBtn = document.getElementById('nextBtn');
@@ -437,38 +411,25 @@
             if (scoreEl) scoreEl.textContent = teams[index].points;
         }
 
-        function showPerson(index) {
-            const p = persons[index];
+        function showSong(index) {
+            const s = songs[index];
             revealed = false;
 
-            progressText.textContent = `Person ${index + 1} von ${persons.length}`;
-            progressBar.style.width = `${((index + 1) / persons.length) * 100}%`;
+            progressText.textContent = `Songzitat ${index + 1} von ${songs.length}`;
+            progressBar.style.width = `${((index + 1) / songs.length) * 100}%`;
 
-            if (p.img) {
-                personImg.classList.remove('hidden-el');
-                imgError.classList.add('hidden-el');
-                personImg.src = p.img;
-            } else {
-                personImg.classList.add('hidden-el');
-                imgError.classList.remove('hidden-el');
-            }
-            personImg.alt = 'Bekannte Person';
+            lyricText.textContent = `"${s.lyrics}"`;
 
-            personName.textContent = p.name;
-            personName.classList.add('hidden');
-            hintText.textContent = 'Wer ist diese Person?';
+            answerInfo.textContent = `${s.title} – ${s.artist}`;
+            answerInfo.classList.add('hidden');
+            hintText.textContent = 'Welcher Song und welcher Künstler?';
 
             revealBtn.disabled = false;
             nextBtn.disabled = true;
         }
 
-        personImg.addEventListener('error', () => {
-            personImg.classList.add('hidden-el');
-            imgError.classList.remove('hidden-el');
-        });
-
         revealBtn.addEventListener('click', () => {
-            personName.classList.remove('hidden');
+            answerInfo.classList.remove('hidden');
             hintText.textContent = '';
             revealBtn.disabled = true;
             nextBtn.disabled = false;
@@ -477,10 +438,10 @@
 
         nextBtn.addEventListener('click', () => {
             current++;
-            if (current >= persons.length) {
+            if (current >= songs.length) {
                 showFinished();
             } else {
-                showPerson(current);
+                showSong(current);
                 renderTeamList();
             }
         });
@@ -489,7 +450,7 @@
             current = 0;
             finishedArea.classList.add('hidden-el');
             quizArea.classList.remove('hidden-el');
-            showPerson(current);
+            showSong(current);
             renderTeamList();
         });
 
@@ -509,8 +470,17 @@
             }
         }
 
+        function initGame() {
+            loadingMsg.classList.add('hidden-el');
+            quizArea.classList.remove('hidden-el');
+            showSong(current);
+            renderTeamList();
+        }
+
         // Start
-        loadImages();
+        setTimeout(() => {
+            initGame();
+        }, 500);
     </script>
 </body>
 
