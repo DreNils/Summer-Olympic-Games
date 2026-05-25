@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8">
   <title>Trinkspiel Turnier – Punkteverwaltung</title>
@@ -10,22 +11,28 @@
       padding: 20px;
       background: #f5f5f5;
     }
-    h1, h2, h3 {
+
+    h1,
+    h2,
+    h3 {
       text-align: center;
     }
+
     .container {
       max-width: 1100px;
       margin: 0 auto;
       background: #fff;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
     .flex {
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
     }
+
     .box {
       flex: 1 1 300px;
       padding: 15px;
@@ -33,30 +40,39 @@
       border-radius: 6px;
       background: #fafafa;
     }
+
     label {
       display: block;
       margin: 5px 0 3px;
       font-weight: bold;
     }
-    input[type="text"], input[type="number"], select {
+
+    input[type="text"],
+    input[type="number"],
+    select {
       width: 100%;
       padding: 6px;
       box-sizing: border-box;
       margin-bottom: 8px;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
     }
-    th, td {
+
+    th,
+    td {
       border: 1px solid #ddd;
       padding: 6px;
       text-align: center;
     }
+
     th {
       background: #eee;
     }
+
     .btn {
       display: inline-block;
       padding: 6px 12px;
@@ -68,333 +84,344 @@
       color: white;
       font-size: 14px;
     }
+
     .btn:disabled {
       background: #aaa;
       cursor: not-allowed;
     }
+
     .btn-secondary {
       background: #28a745;
     }
+
     .btn-danger {
       background: #dc3545;
     }
+
     .score-highlight {
       font-weight: bold;
       color: #007b00;
     }
+
     .small {
       font-size: 12px;
       color: #666;
     }
+
     #rules {
       margin-top: 25px;
     }
+
     #rules h3 {
       text-align: left;
       margin-top: 15px;
       margin-bottom: 5px;
     }
+
     #rules p {
       margin: 2px 0 6px;
     }
+
     #rules ul {
       margin-top: 0;
     }
   </style>
 </head>
+
 <body>
-<div class="container">
-  <h1>Trinkspiel Turnier – Punkteverwaltung</h1>
+  <div class="container">
+    <h1>Summer-Olympic-Games – Punkteverwaltung</h1>
 
-  <!-- Allgemeine Infos -->
-  <div class="box" style="margin-bottom: 20px;">
-    <h2>Allgemeine Regeln</h2>
-    <ul>
-      <li>8 Personen, 2 Teams à 4 Spieler (oder beliebig viele Teams).</li>
-      <li>Standardpunkte pro Spiel: Sieg = 3, Unentschieden = 1, Niederlage = 0.</li>
-      <li>Jede Person sollte im Laufe des Abends mindestens einmal aktiv mitmachen.</li>
-      <li>Trinkmenge könnt ihr anpassen (Bier, Radler, alkoholfrei).</li>
-      <li>Sicherheit geht vor: Wer nicht mehr trinken möchte, lässt es – das Team darf trotzdem mitspielen.</li>
-    </ul>
-  </div>
+    <!-- Allgemeine Infos -->
+    <div class="box" style="margin-bottom: 20px;">
+      <h2>Allgemeine Regeln</h2>
+      <ul>
+        <li>8 Personen, 4 Teams à 2 Spieler (oder beliebig viele Teams).</li>
+        <li>Standardpunkte pro Spiel: Sieg = 3, Unentschieden = 1, Niederlage = 0.</li>
+        <li>Trinkmenge könnt ihr anpassen (Bier, Radler, alkoholfrei) lol natürlich nicht, 0,5 Kolben.</li>
+        <li>Sicherheit geht vor: Wer nicht mehr trinken möchte, lässt es – das Team darf trotzdem mitspielen.</li>
+      </ul>
+    </div>
 
-  <div class="flex">
-    <!-- Teams -->
-    <div class="box">
-      <h2>Teams</h2>
-      <label for="teamName">Teamname</label>
-      <input type="text" id="teamName" placeholder="z.B. Team A">
-      <button class="btn" id="addTeamBtn">Team hinzufügen</button>
-      <button class="btn btn-danger" id="resetBtn">Reset (Alles löschen)</button>
-      <p class="small">Füge zuerst deine Teams hinzu (z.B. Team A, Team B). „Reset“ löscht alle Teams und Punkte.</p>
+    <div class="flex">
+      <!-- Teams -->
+      <div class="box">
+        <h2>Teams</h2>
+        <label for="teamName">Teamname</label>
+        <input type="text" id="teamName" placeholder="z.B. Team A">
+        <button class="btn" id="addTeamBtn">Team hinzufügen</button>
+        <button class="btn btn-danger" id="resetBtn">Reset (Alles löschen)</button>
+        <p class="small">Füge zuerst deine Teams hinzu (z.B. Team A, Team B). „Reset“ löscht alle Teams und Punkte.</p>
 
-      <table id="teamsTable">
+        <table id="teamsTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Team</th>
+              <th>Gesamtpunkte</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- wird per JS gefüllt -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Spiele & Punkte -->
+      <div class="box">
+        <h2>Spiele & Punkte</h2>
+
+        <label for="gameSelect">Spiel auswählen</label>
+        <select id="gameSelect">
+          <option value="Personenraten">1. Personenraten</option>
+          <option value="Songzitate raten">2. Songzitate raten</option>
+          <option value="Geo Guessing">3. Geo Guessing</option>
+          <option value="Schwammstaffel">4. Schwammstaffel</option>
+          <option value="Schubkarrenlauf">5. Schubkarrenlauf</option>
+          <option value="Bierpong">6. Bierpong</option>
+          <option value="Flanki-Ball">7. Flanki-Ball</option>
+          <option value="Trichter trinken">8. Trichter trinken</option>
+          <option value="Bierstaffel">9. Bierstaffel</option>
+          <option value="Extra-Spiel 1">10. Extra-Spiel 1</option>
+          <option value="Extra-Spiel 2">11. Extra-Spiel 2</option>
+        </select>
+
+        <label>Ergebnis (Turnierpunkte)</label>
+        <div id="resultInputs">
+          Noch keine Teams angelegt.
+        </div>
+        <button class="btn btn-secondary" id="saveResultBtn" disabled>
+          Ergebnis speichern
+        </button>
+
+        <p class="small">
+          Tragt hier die Turnierpunkte pro Spiel ein (meist 3/1/0).
+          „Extra-Spiel 1“ und „Extra-Spiel 2“ sind Platzhalter für eigene Spiele.
+        </p>
+      </div>
+    </div>
+
+    <!-- Übersicht -->
+    <div class="box" style="margin-top:20px;">
+      <h2>Spielverlauf</h2>
+      <table id="gamesTable">
         <thead>
-        <tr>
-          <th>#</th>
-          <th>Team</th>
-          <th>Gesamtpunkte</th>
-        </tr>
+          <tr>
+            <th>#</th>
+            <th>Spiel</th>
+            <th>Team</th>
+            <th>Punkte</th>
+          </tr>
         </thead>
         <tbody>
-        <!-- wird per JS gefüllt -->
+          <!-- wird per JS gefüllt -->
         </tbody>
       </table>
     </div>
 
-    <!-- Spiele & Punkte -->
-    <div class="box">
-      <h2>Spiele & Punkte</h2>
+    <!-- Spielregeln & Erklärungen -->
+    <div class="box" id="rules">
+      <h2>Spielerklärungen & Regeln</h2>
 
-      <label for="gameSelect">Spiel auswählen</label>
-      <select id="gameSelect">
-        <option value="Personenraten">1. Personenraten</option>
-        <option value="Songzitate raten">2. Songzitate raten</option>
-        <option value="Geo Guessing">3. Geo Guessing</option>
-        <option value="Schwammstaffel">4. Schwammstaffel</option>
-        <option value="Schubkarrenlauf">5. Schubkarrenlauf</option>
-        <option value="Bierpong">6. Bierpong</option>
-        <option value="Flanki-Ball">7. Flanki-Ball</option>
-        <option value="Trichter trinken">8. Trichter trinken</option>
-        <option value="Bierstaffel">9. Bierstaffel</option>
-        <option value="Extra-Spiel 1">10. Extra-Spiel 1</option>
-        <option value="Extra-Spiel 2">11. Extra-Spiel 2</option>
-      </select>
+      <h3>1. Personenraten</h3>
+      <p><strong>Art:</strong> Denk-/Kennlernspiel, ca. 15–20 Min.</p>
+      <ul>
+        <li>Es werden Fotos von verschiedenen Personen gezeigt.</li>
+        <li>Das Team, das die meisten Personen richtig erkennt, gewinnt.</li>
+        <li>Es zählt auch nur der Vorname / Nachname</li>
+        <li>Es zählt auch nur der Vorname / Nachname</li>
+      </ul>
 
-      <label>Ergebnis (Turnierpunkte)</label>
-      <div id="resultInputs">
-        Noch keine Teams angelegt.
-      </div>
-      <button class="btn btn-secondary" id="saveResultBtn" disabled>
-        Ergebnis speichern
-      </button>
+      <h3>2. Songzitate raten</h3>
+      <p><strong>Art:</strong> Musik-/Quizspiel, ca. 20 Min.</p>
+      <ul>
+        <li>Spielleitung liest ein Songzitat vor oder spielt 3–5 Sekunden eines Songs.</li>
+        <li>Teams buzzern/rufen rein.</li>
+        <li>1 Punkt für richtigen Titel oder Interpret.</li>
+        <li>Team mit den meisten Punkten gewinnt das Spiel.</li>
+      </ul>
+
+      <h3>3. Geo Guessing</h3>
+      <p><strong>Art:</strong> Geografie-/Quizspiel, ca. 20 Min.</p>
+      <ul>
+        <li>Bilder / Streetview / GeoGuessr verwenden.</li>
+        <li>Beide Teams tippen geheim Land (und optional Stadt/Region).</li>
+        <li>Land richtig = 2 Punkte, Stadt/Region zusätzlich = +1 Punkt.</li>
+        <li>Team mit den meisten Punkten gewinnt.</li>
+      </ul>
+
+      <h3>4. Schwammstaffel</h3>
+      <p><strong>Art:</strong> Bewegung / Geschick, ca. 15–20 Min.</p>
+      <ul>
+        <li>Pro Team: 1 Starteimer (mit Wasser), 1 Zieleimer (leer), 1 Schwamm.</li>
+        <li>Start- und Zieleimer ca. 8–10 m entfernt.</li>
+        <li>Spieler taucht Schwamm, rennt, wringt aus, rennt zurück, übergibt.</li>
+        <li>Alle im Team müssen mindestens einmal laufen.</li>
+        <li>Nach Zeit X gewinnt das Team mit mehr Wasser im Zieleimer.</li>
+      </ul>
+
+      <h3>5. Schubkarrenlauf</h3>
+      <p><strong>Art:</strong> Bewegung / Fun, ca. 15 Min.</p>
+      <ul>
+        <li>Paare: einer ist „Rad“, einer „Fahrer“.</li>
+        <li>Strecke 10–15 m, hin und zurück.</li>
+        <li>Alle Paare einmal laufen lassen, Zeiten addieren.</li>
+        <li>Schnellere Gesamtzeit gewinnt.</li>
+      </ul>
+
+      <h3>6. Bierpong</h3>
+      <p><strong>Art:</strong> Geschick/Trinkspiel, ca. 30 Min.</p>
+      <ul>
+        <li>Pro Seite 6–10 Becher in Dreiecksform mit Getränk füllen.</li>
+        <li>Teams werfen abwechselnd Tischtennisbälle auf gegnerische Becher.</li>
+        <li>Treffer: Gegner trinkt Becher, Becher wird entfernt.</li>
+        <li>Team, das alle gegnerischen Becher zuerst abräumt, gewinnt.</li>
+      </ul>
+
+      <h3>7. Flanki-Ball</h3>
+      <p><strong>Art:</strong> Wurf-/Trinkspiel (draußen ideal), ca. 25 Min.</p>
+      <ul>
+        <li>Teams stehen sich gegenüber, Flasche in der Mitte.</li>
+        <li>Trifft ein Team die Flasche, darf es trinken, bis das andere Team Flasche aufgestellt und Ball zurückgelegt
+          hat.</li>
+        <li>Team, das zuerst alle Getränke leer hat, gewinnt.</li>
+      </ul>
+
+      <h3>8. Trichter trinken</h3>
+      <p><strong>Art:</strong> kurzes Trinkspiel, ca. 10 Min.</p>
+      <ul>
+        <li>Pro Team treten z.B. 2 Personen nacheinander am Trichter an.</li>
+        <li>Gleiche Menge einfüllen, Zeit stoppen.</li>
+        <li>Team mit der schnelleren addierten Zeit gewinnt.</li>
+      </ul>
+
+      <h3>9. Bierstaffel</h3>
+      <p><strong>Art:</strong> Abschlussstaffel, ca. 20 Min.</p>
+      <ul>
+        <li>Pro Team mehrere Getränke am Start, Strecke 15–20 m.</li>
+        <li>Läufer trinkt, läuft hin und zurück, klatscht ab.</li>
+        <li>Team, das als erstes alle Läufer fertig hat, gewinnt.</li>
+      </ul>
+
+      <h3>10. Extra-Spiel 1 & 11. Extra-Spiel 2</h3>
+      <p><strong>Art:</strong> Platzhalter für eigene Games.</p>
+      <ul>
+        <li>Ihr könnt spontan weitere Spiele erfinden oder vorhandene Spiele wiederholen.</li>
+        <li>Tragt sie einfach unter „10. Extra-Spiel 1“ oder „11. Extra-Spiel 2“ ein.</li>
+      </ul>
 
       <p class="small">
-        Tragt hier die Turnierpunkte pro Spiel ein (meist 3/1/0).  
-        „Extra-Spiel 1“ und „Extra-Spiel 2“ sind Platzhalter für eigene Spiele.
+        Am Ende alle Turnierpunkte aus der Tabelle „Spielverlauf“ summieren – Team mit den meisten Punkten gewinnt den
+        Abend.
       </p>
     </div>
   </div>
 
-  <!-- Übersicht -->
-  <div class="box" style="margin-top:20px;">
-    <h2>Spielverlauf</h2>
-    <table id="gamesTable">
-      <thead>
-      <tr>
-        <th>#</th>
-        <th>Spiel</th>
-        <th>Team</th>
-        <th>Punkte</th>
-      </tr>
-      </thead>
-      <tbody>
-      <!-- wird per JS gefüllt -->
-      </tbody>
-    </table>
-  </div>
+  <script>
+    let teams = [];
+    let results = [];
 
-  <!-- Spielregeln & Erklärungen -->
-  <div class="box" id="rules">
-    <h2>Spielerklärungen & Regeln</h2>
+    const teamNameInput = document.getElementById('teamName');
+    const addTeamBtn = document.getElementById('addTeamBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const teamsTableBody = document.querySelector('#teamsTable tbody');
+    const resultInputsDiv = document.getElementById('resultInputs');
+    const saveResultBtn = document.getElementById('saveResultBtn');
+    const gamesTableBody = document.querySelector('#gamesTable tbody');
+    const gameSelect = document.getElementById('gameSelect');
 
-    <h3>1. Personenraten</h3>
-    <p><strong>Art:</strong> Denk-/Kennlernspiel, ca. 15–20 Min.</p>
-    <ul>
-      <li>Jede Person schreibt heimlich einen Namen auf einen Zettel (eigener Name oder bekannte Person).</li>
-      <li>Zettel mischen, jeder zieht einen Zettel und klebt ihn sich an die Stirn, ohne ihn zu sehen.</li>
-      <li>Reihum darf jede Person eine Ja/Nein-Frage zur eigenen Person stellen.</li>
-      <li>Wer seine Person errät, nimmt den Zettel ab und hilft dem eigenen Team.</li>
-      <li>Team mit den meisten erratenen Personen gewinnt das Spiel.</li>
-    </ul>
-
-    <h3>2. Songzitate raten</h3>
-    <p><strong>Art:</strong> Musik-/Quizspiel, ca. 20 Min.</p>
-    <ul>
-      <li>Spielleitung liest ein Songzitat vor oder spielt 3–5 Sekunden eines Songs.</li>
-      <li>Teams buzzern/rufen rein.</li>
-      <li>1 Punkt für richtigen Titel oder Interpret.</li>
-      <li>Team mit den meisten Punkten gewinnt das Spiel.</li>
-    </ul>
-
-    <h3>3. Geo Guessing</h3>
-    <p><strong>Art:</strong> Geografie-/Quizspiel, ca. 20 Min.</p>
-    <ul>
-      <li>Bilder / Streetview / GeoGuessr verwenden.</li>
-      <li>Beide Teams tippen geheim Land (und optional Stadt/Region).</li>
-      <li>Land richtig = 2 Punkte, Stadt/Region zusätzlich = +1 Punkt.</li>
-      <li>Team mit den meisten Punkten gewinnt.</li>
-    </ul>
-
-    <h3>4. Schwammstaffel</h3>
-    <p><strong>Art:</strong> Bewegung / Geschick, ca. 15–20 Min.</p>
-    <ul>
-      <li>Pro Team: 1 Starteimer (mit Wasser), 1 Zieleimer (leer), 1 Schwamm.</li>
-      <li>Start- und Zieleimer ca. 8–10 m entfernt.</li>
-      <li>Spieler taucht Schwamm, rennt, wringt aus, rennt zurück, übergibt.</li>
-      <li>Alle im Team müssen mindestens einmal laufen.</li>
-      <li>Nach Zeit X gewinnt das Team mit mehr Wasser im Zieleimer.</li>
-    </ul>
-
-    <h3>5. Schubkarrenlauf</h3>
-    <p><strong>Art:</strong> Bewegung / Fun, ca. 15 Min.</p>
-    <ul>
-      <li>Paare: einer ist „Rad“, einer „Fahrer“.</li>
-      <li>Strecke 10–15 m, hin und zurück.</li>
-      <li>Alle Paare einmal laufen lassen, Zeiten addieren.</li>
-      <li>Schnellere Gesamtzeit gewinnt.</li>
-    </ul>
-
-    <h3>6. Bierpong</h3>
-    <p><strong>Art:</strong> Geschick/Trinkspiel, ca. 30 Min.</p>
-    <ul>
-      <li>Pro Seite 6–10 Becher in Dreiecksform mit Getränk füllen.</li>
-      <li>Teams werfen abwechselnd Tischtennisbälle auf gegnerische Becher.</li>
-      <li>Treffer: Gegner trinkt Becher, Becher wird entfernt.</li>
-      <li>Team, das alle gegnerischen Becher zuerst abräumt, gewinnt.</li>
-    </ul>
-
-    <h3>7. Flanki-Ball</h3>
-    <p><strong>Art:</strong> Wurf-/Trinkspiel (draußen ideal), ca. 25 Min.</p>
-    <ul>
-      <li>Teams stehen sich gegenüber, Flasche in der Mitte.</li>
-      <li>Trifft ein Team die Flasche, darf es trinken, bis das andere Team Flasche aufgestellt und Ball zurückgelegt hat.</li>
-      <li>Team, das zuerst alle Getränke leer hat, gewinnt.</li>
-    </ul>
-
-    <h3>8. Trichter trinken</h3>
-    <p><strong>Art:</strong> kurzes Trinkspiel, ca. 10 Min.</p>
-    <ul>
-      <li>Pro Team treten z.B. 2 Personen nacheinander am Trichter an.</li>
-      <li>Gleiche Menge einfüllen, Zeit stoppen.</li>
-      <li>Team mit der schnelleren addierten Zeit gewinnt.</li>
-    </ul>
-
-    <h3>9. Bierstaffel</h3>
-    <p><strong>Art:</strong> Abschlussstaffel, ca. 20 Min.</p>
-    <ul>
-      <li>Pro Team mehrere Getränke am Start, Strecke 15–20 m.</li>
-      <li>Läufer trinkt, läuft hin und zurück, klatscht ab.</li>
-      <li>Team, das als erstes alle Läufer fertig hat, gewinnt.</li>
-    </ul>
-
-    <h3>10. Extra-Spiel 1 & 11. Extra-Spiel 2</h3>
-    <p><strong>Art:</strong> Platzhalter für eigene Games.</p>
-    <ul>
-      <li>Ihr könnt spontan weitere Spiele erfinden oder vorhandene Spiele wiederholen.</li>
-      <li>Tragt sie einfach unter „10. Extra-Spiel 1“ oder „11. Extra-Spiel 2“ ein.</li>
-    </ul>
-
-    <p class="small">
-      Am Ende alle Turnierpunkte aus der Tabelle „Spielverlauf“ summieren – Team mit den meisten Punkten gewinnt den Abend.
-    </p>
-  </div>
-</div>
-
-<script>
-  let teams = [];
-  let results = [];
-
-  const teamNameInput   = document.getElementById('teamName');
-  const addTeamBtn      = document.getElementById('addTeamBtn');
-  const resetBtn        = document.getElementById('resetBtn');
-  const teamsTableBody  = document.querySelector('#teamsTable tbody');
-  const resultInputsDiv = document.getElementById('resultInputs');
-  const saveResultBtn   = document.getElementById('saveResultBtn');
-  const gamesTableBody  = document.querySelector('#gamesTable tbody');
-  const gameSelect      = document.getElementById('gameSelect');
-
-  function renderTeams() {
-    teamsTableBody.innerHTML = '';
-    teams.forEach((t, i) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
+    function renderTeams() {
+      teamsTableBody.innerHTML = '';
+      teams.forEach((t, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
         <td>${i + 1}</td>
         <td>${t.name}</td>
         <td class="score-highlight">${t.points}</td>
       `;
-      teamsTableBody.appendChild(tr);
-    });
-  }
-
-  function renderResultInputs() {
-    if (teams.length === 0) {
-      resultInputsDiv.textContent = 'Noch keine Teams angelegt.';
-      saveResultBtn.disabled = true;
-      return;
+        teamsTableBody.appendChild(tr);
+      });
     }
-    resultInputsDiv.innerHTML = '';
-    teams.forEach((t, i) => {
-      const label = document.createElement('label');
-      label.textContent = `Punkte für ${t.name}`;
-      label.htmlFor = `teamPoints_${i}`;
 
-      const input = document.createElement('input');
-      input.type = 'number';
-      input.min = '0';
-      input.max = '3';
-      input.step = '1';
-      input.id = `teamPoints_${i}`;
-      input.value = '0';
+    function renderResultInputs() {
+      if (teams.length === 0) {
+        resultInputsDiv.textContent = 'Noch keine Teams angelegt.';
+        saveResultBtn.disabled = true;
+        return;
+      }
+      resultInputsDiv.innerHTML = '';
+      teams.forEach((t, i) => {
+        const label = document.createElement('label');
+        label.textContent = `Punkte für ${t.name}`;
+        label.htmlFor = `teamPoints_${i}`;
 
-      resultInputsDiv.appendChild(label);
-      resultInputsDiv.appendChild(input);
-    });
-    saveResultBtn.disabled = false;
-  }
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.min = '0';
+        input.max = '3';
+        input.step = '1';
+        input.id = `teamPoints_${i}`;
+        input.value = '0';
 
-  function renderGames() {
-    gamesTableBody.innerHTML = '';
-    results.forEach((r, idx) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
+        resultInputsDiv.appendChild(label);
+        resultInputsDiv.appendChild(input);
+      });
+      saveResultBtn.disabled = false;
+    }
+
+    function renderGames() {
+      gamesTableBody.innerHTML = '';
+      results.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
         <td>${idx + 1}</td>
         <td>${r.game}</td>
         <td>${teams[r.teamIndex].name}</td>
         <td>${r.points}</td>
       `;
-      gamesTableBody.appendChild(tr);
-    });
-  }
-
-  addTeamBtn.addEventListener('click', () => {
-    const name = teamNameInput.value.trim();
-    if (!name) return;
-    teams.push({ name, points: 0 });
-    teamNameInput.value = '';
-    renderTeams();
-    renderResultInputs();
-  });
-
-  saveResultBtn.addEventListener('click', () => {
-    if (teams.length === 0) return;
-    const game = gameSelect.value;
-
-    teams.forEach((t, i) => {
-      const inp = document.getElementById(`teamPoints_${i}`);
-      const pts = parseInt(inp.value || '0', 10);
-      if (!isNaN(pts) && pts > 0) {
-        results.push({ game, teamIndex: i, points: pts });
-        t.points += pts;
-      }
-    });
-
-    renderTeams();
-    renderGames();
-    renderResultInputs();
-  });
-
-  resetBtn.addEventListener('click', () => {
-    if (!confirm('Wirklich alles löschen? Teams, Punkte und Spielverlauf gehen verloren.')) {
-      return;
+        gamesTableBody.appendChild(tr);
+      });
     }
-    teams = [];
-    results = [];
-    renderTeams();
-    renderGames();
-    renderResultInputs();
-    teamNameInput.value = '';
-  });
-</script>
+
+    addTeamBtn.addEventListener('click', () => {
+      const name = teamNameInput.value.trim();
+      if (!name) return;
+      teams.push({ name, points: 0 });
+      teamNameInput.value = '';
+      renderTeams();
+      renderResultInputs();
+    });
+
+    saveResultBtn.addEventListener('click', () => {
+      if (teams.length === 0) return;
+      const game = gameSelect.value;
+
+      teams.forEach((t, i) => {
+        const inp = document.getElementById(`teamPoints_${i}`);
+        const pts = parseInt(inp.value || '0', 10);
+        if (!isNaN(pts) && pts > 0) {
+          results.push({ game, teamIndex: i, points: pts });
+          t.points += pts;
+        }
+      });
+
+      renderTeams();
+      renderGames();
+      renderResultInputs();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      if (!confirm('Wirklich alles löschen? Teams, Punkte und Spielverlauf gehen verloren.')) {
+        return;
+      }
+      teams = [];
+      results = [];
+      renderTeams();
+      renderGames();
+      renderResultInputs();
+      teamNameInput.value = '';
+    });
+  </script>
 </body>
+
 </html>
