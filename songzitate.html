@@ -134,6 +134,10 @@
             background: #6c757d;
         }
 
+        .btn-speak {
+            background: #6f42c1;
+        }
+
         .divider {
             border: none;
             border-top: 1px solid #ddd;
@@ -275,6 +279,7 @@
 
                 <p class="hint" id="hintText">Welcher Song und welcher Künstler?</p>
 
+                <button class="btn btn-speak" id="speakBtn">🔊 Vorlesen</button>
                 <button class="btn btn-reveal" id="revealBtn">Antwort aufdecken</button>
                 <button class="btn btn-next" id="nextBtn" disabled>Nächstes Zitat →</button>
             </div>
@@ -347,6 +352,7 @@
         const finishedArea = document.getElementById('finishedArea');
         const summaryBody = document.getElementById('summaryBody');
         const restartBtn = document.getElementById('restartBtn');
+        const speakBtn = document.getElementById('speakBtn');
 
         function loadTeams() {
             try {
@@ -426,7 +432,19 @@
 
             revealBtn.disabled = false;
             nextBtn.disabled = true;
+            speakBtn.disabled = false;
         }
+
+        function speakLyric() {
+            const s = songs[current];
+            const utterance = new SpeechSynthesisUtterance(`"${s.lyrics}"`);
+            utterance.lang = 'de-DE';
+            utterance.rate = 0.9;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+
+        speakBtn.addEventListener('click', speakLyric);
 
         revealBtn.addEventListener('click', () => {
             answerInfo.classList.remove('hidden');
